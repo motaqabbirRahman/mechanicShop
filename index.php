@@ -15,7 +15,7 @@
         <div class="description">
             <p>Rev up your engine and get back on the road with our expert car mechanics!
                 <br>Schedule a repair at your convenience and with your favorite mechanic. 
-                <br>Trust us to fix your car right the first time.</p>
+            <br>Trust us to fix your car right the first time.</p>
         </div>
         <div class="button">
            <p class="appointmentButton"><a href="appointment.php">Make Appointment</a> </p>

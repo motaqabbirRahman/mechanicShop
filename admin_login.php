@@ -7,15 +7,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $username = $_POST["username"];
     $password = $_POST["password"];
     
-      $sql = "SELECT * from users where username='$username' AND password='$password'";
+      $sql = "SELECT * from admin where username='$username' AND password='$password'";
       $result = mysqli_query($conn, $sql);
       $num = mysqli_num_rows($result);
       if ($num == 1){
         $login = true;
         session_start();
-        $_SESSION['loggedin'] = true;
+        $_SESSION['adminLoggedin'] = true;
         $_SESSION['username'] = $username;
-        header("location: appointment.php");
+        $_SESSION['user_type'] = "admin";
+        header("location: admin_dashboard.php");
       }
      else{
       $showError = "Invalid Credentials";
@@ -23,7 +24,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,20 +32,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;500;600;700&display=swap" rel="stylesheet">
-    <title>Login</title>
+    <title>Admin Login</title>
 </head>
 <header>
 </header>
 <body>
     <body>
-	<form action="login.php" method="post">
-		<h2>Login</h2>
+	<form action="admin_login.php" method="post">
+		<h2>Admin Login</h2>
 		<input type="text" id="username" name="username" required placeholder="username">
 		<input type="password" id="password" name="password" required placeholder="password">
-		<input type="submit" name="submit" value="Login" id="loginButton">  
-		<p class="register">Not registered yet? <a class="link" href="signin.php">register</a> </p>
-        <p class="register"><a class="link" href="appointment.html">admin login</a> </p>
-          <?php 
+		<input type="submit" value="Login" id="adminLogin">
+        <?php 
                 if ($login){
                     echo'<strong>You are logged in Successfully!</strong>';
                 }

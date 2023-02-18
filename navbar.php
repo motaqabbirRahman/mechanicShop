@@ -7,7 +7,7 @@
     <div class="login">
       <a href="login.php">Login</a>
       <a href="adminlogin.php">Admin Login</a>
-      <a href="signin.php">Sign In</a>
+      <a href="signup.php">Sign Up</a>
     </div>
   </div>
 </div>

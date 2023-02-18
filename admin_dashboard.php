@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+if(!isset($_SESSION['adminLoggedin']) || $_SESSION['adminLoggedin']!=true){
+	header("location: admin_login.php");
+	exit;
+}
+
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,48 +56,100 @@
   <!-- Main content -->
   <main>
     <div id="appointment-details">
-      <h2 style="color:blue;">Appointment Details</h2>
+      <h2 style="color:white;">Appointment Details</h2>
+      <?php 
+      if (isset($_GET['msg']) && $_GET['msg'] === 'success') {
+  echo '<p class="success">Appointment successfully updated!</p>';
+        }
+      ?>
       <table>
         <thead>
           <tr>
             <th>Client Name</th>
             <th>Phone</th>
-            <th>Car Registration</th>
+            <th>Color</th>
+            <th>License No.</th>
+            <th>Engine No.</th>
             <th>Appointment Date</th>
             <th>Mechanic Name</th>
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Alice Johnson</td>
-            <td>123-456-7890</td>
-            <td>ABC123</td>
-            <td>2023-02-16</td>
-            <td>Bob Smith</td>
-            <td><button>Edit</button></td>
-          </tr>
-        </tbody>
+        <ul>
+			    <?Php 
+          require('connection.inc.php');
+					$sql = "SELECT * FROM appointments";
+					$result = mysqli_query($conn, $sql);
+                    
+					if ($result) {
+						while ($row = mysqli_fetch_assoc($result)) {
+							
+				          echo '<tr>';
+							echo '<td>' . $row['name'] . '</td>';
+							echo '<td>' . $row['phone'] . '</td>';
+							echo '<td>' . $row['color'] . '</td>';
+							echo '<td>' . $row['license_number'] . '</td>';
+							echo '<td>' . $row['engine_number'] . '</td>';
+							echo '<td>' . $row['appointment_date'] . '</td>';
+							echo '<td>' . $row['mechanic_name'] . '</td>';
+							echo '<td><a href="edit_appointment.php?id=' . $row['id'] . '">Edit</a></td>';
+						 echo '</tr>';
+						}
+					} else {
+						echo "Error: " . mysqli_error($conn);
+					}
+					mysqli_close($conn);
+
+				
+				?>
       </table>
     </div>
     
     <div id="mechanics-status">
-      <h2 style="color:blue;">Mechanics Status</h2>
+      <h2 style="color:white;">Mechanics Status  <a href="modify_mechanic.php">Add Mehcanic</a></h2>
+            <?php 
+              if (isset($_GET['msg']) && $_GET['msg'] === 'success') {
+          echo '<p class="success">Appointment successfully updated!</p>';
+                }
+      ?>
+      <div>
+           
+      </div>
       <table>
         <thead>
           <tr>
             <th>Mechanic Name</th>
             <th>Daily Car Count</th>
+            <th>Appointments Booked</th>
             <th>Action</th>
+            <th>Upadate</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Bob Smith</td>
-            <td>8</td>
-            <td><button>Edit</button></td>
-          </tr>
-        </tbody>
+        <?Php 
+          require('connection.inc.php');
+					$sql = "SELECT * FROM mechanics";
+					$result = mysqli_query($conn, $sql);
+                    
+					if ($result) {
+						while ($row = mysqli_fetch_assoc($result)) {
+							
+				          echo '<tr>';
+							echo '<td>' . $row['mechanic_name'] . '</td>';
+							echo '<td>' . $row['appointments_monthly_limit'] . '</td>';
+							echo '<td>' . $row['appointments_booked'] . '</td>';
+							echo '<td><a href="modify_mechanic.php?id=' . $row['mechanic_name'] . '">Edit</a>
+                        <a href="update_mechanic_status.php?id=' . $row['mechanic_name'] . '">Update</a>
+                   </td>';
+              echo '<td></td>';
+						 echo '</tr>';
+						}
+					} else {
+						echo "Error: " . mysqli_error($conn);
+					}
+					mysqli_close($conn);
+
+				
+				?>
       </table>
     </div>
   </main>
