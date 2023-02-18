@@ -136,7 +136,7 @@ function deleteMechanic(mechanicId) {
 							echo '<td>' . $row['engine_number'] . '</td>';
 							echo '<td>' . $row['appointment_date'] . '</td>';
 							echo '<td>' . $row['mechanic_name'] . '</td>';
-							echo '<td><a href="edit_appointment.php?id=' . $row['id'] . '">Edit</a></td>';
+							echo '<td><a href="edit_appointment_admin.php?id=' . $row['id'] . '">Edit</a></td>';
 						 echo '</tr>';
 						}
 					} else {

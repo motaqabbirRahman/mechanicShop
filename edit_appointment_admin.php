@@ -1,22 +1,6 @@
 <?php
 session_start();
-
-// if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true){
-// 	header("location: login.php");
-// 	exit;
-// }
-
-// else if(!isset($_SESSION['adminLoggedin']) || $_SESSION['adminLoggedin']!=true){
-// 	header("location: admin_login.php");
-// 	exit;
-// }
-
-if (!isset($_SESSION['loggedin'])) {
-    header('Location: login.php');
-    exit();
-}
-
-else if (!isset($_SESSION['adminLoggedin'])) {
+ if (!isset($_SESSION['adminLoggedin'])) {
         header('Location: admin_login.php');
         exit();
   }
@@ -106,6 +90,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </body>
         </html>
         <?php mysqli_close($conn); ?>
-
 
 
