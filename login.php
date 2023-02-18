@@ -43,8 +43,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		<input type="text" id="username" name="username" required placeholder="username">
 		<input type="password" id="password" name="password" required placeholder="password">
 		<input type="submit" name="submit" value="Login" id="loginButton">  
-		<p class="register">Not registered yet? <a class="link" href="signin.php">register</a> </p>
-        <p class="register"><a class="link" href="appointment.html">admin login</a> </p>
+		<p class="register">Not registered yet? <a href="signin.php">register</a> </p>
+        <p class="register"><a href="appointment.html">admin login</a> </p>
           <?php 
                 if ($login){
                     echo'<strong>You are logged in Successfully!</strong>';

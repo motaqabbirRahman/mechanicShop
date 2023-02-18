@@ -48,7 +48,12 @@ if(!isset($_SESSION['adminLoggedin']) || $_SESSION['adminLoggedin']!=true){
 <body>
   <!-- Navigation bar -->
   <nav>
-    <a href="">Dashboard</a>
+    <?php
+        if(isset($_SESSION['username'])){
+      // display the username and logout option
+       echo '<div style="margin-bottom:10px;"> Welcome: ' . $_SESSION['username'] . '</div>'; echo '<div>' .  '<a style="padding: 5px;  background-color:#d62828;"  href="admin_logout.php">Logout</a></div>';
+    }
+    ?>
     <a href="#appointment-details">Appointment Details</a>
     <a href="#mechanics-status">Mechanics Status</a>
   </nav>
@@ -106,10 +111,10 @@ if(!isset($_SESSION['adminLoggedin']) || $_SESSION['adminLoggedin']!=true){
     </div>
     
     <div id="mechanics-status">
-      <h2 style="color:white;">Mechanics Status  <a href="modify_mechanic.php">Add Mehcanic</a></h2>
+      <h2 style="color:white;">Mechanics Status  <a href="add_mechanic.php">Add Mehcanic</a></h2>
             <?php 
-              if (isset($_GET['msg']) && $_GET['msg'] === 'success') {
-          echo '<p class="success">Appointment successfully updated!</p>';
+              if (isset($_GET['msg']) && $_GET['msg'] === 'updated') {
+          echo '<p class="success">Successfully updated!</p>';
                 }
       ?>
       <div>
@@ -122,7 +127,6 @@ if(!isset($_SESSION['adminLoggedin']) || $_SESSION['adminLoggedin']!=true){
             <th>Daily Car Count</th>
             <th>Appointments Booked</th>
             <th>Action</th>
-            <th>Upadate</th>
           </tr>
         </thead>
         <?Php 
@@ -137,10 +141,9 @@ if(!isset($_SESSION['adminLoggedin']) || $_SESSION['adminLoggedin']!=true){
 							echo '<td>' . $row['mechanic_name'] . '</td>';
 							echo '<td>' . $row['appointments_monthly_limit'] . '</td>';
 							echo '<td>' . $row['appointments_booked'] . '</td>';
-							echo '<td><a href="modify_mechanic.php?id=' . $row['mechanic_name'] . '">Edit</a>
-                        <a href="update_mechanic_status.php?id=' . $row['mechanic_name'] . '">Update</a>
+							echo '<td><a href="edit_mechanic.php?id=' . $row['mechanic_name'] . '">Update</a>
+                        <a href="update_mechanic_status.php?id=' . $row['mechanic_name'] . '">Delete</a>
                    </td>';
-              echo '<td></td>';
 						 echo '</tr>';
 						}
 					} else {

@@ -16,8 +16,10 @@ $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
 $dailyLimit = filter_input(INPUT_POST, 'dailyLimit', FILTER_SANITIZE_NUMBER_INT);
 
 // Insert data into the database
-$sql = "INSERT INTO mechanics (mechanic_name, appointments_monthly_limit, appointments_booked)
-VALUES ('$name', $dailyLimit, 0)";
+$sql = "UPDATE mechanics
+SET appointments_monthly_limit = $dailyLimit,
+    appointments_booked = 0
+WHERE mechanic_name = '$name'";
 
 if (mysqli_query($conn, $sql)) {
 $showAlert = true;
@@ -42,9 +44,9 @@ echo "Error: " . $sql . "<br>" . mysqli_error($conn);
 </head>
 <body>
     <div class="form-container">
-			<form action="/mechanicshop/modify_mechanic.php" method="post">
-				<h2>Add New Mechanic</h2>
-				<input type="text" id="name" name="name" placeholder="Name" required>
+			<form action="/mechanicshop/edit_mechanic.php" method="post">
+				<h2>Modify Mechanic</h2>
+				<input type="text" id="name" name="name" placeholder="Name" value="<?php echo isset($_GET['id']) ? htmlspecialchars($_GET['id']) : ''; ?>" required>
                 <input type="number" id="dailyLimit" name="dailyLimit" placeholder="Daily Limit" required>
 				<input type="submit" value="Submit" id="submit">
 				<?php

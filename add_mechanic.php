@@ -1,25 +1,59 @@
 <?php
+session_start();
+
+if(!isset($_SESSION['adminLoggedin']) || $_SESSION['adminLoggedin']!=true){
+	header("location: admin_login.php");
+	exit;
+}
+
+// Validate and sanitize input
 require('connection.inc.php');
+$showAlert = false;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+// Validate and sanitize input
+$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+$dailyLimit = filter_input(INPUT_POST, 'dailyLimit', FILTER_SANITIZE_NUMBER_INT);
+
+// Insert data into the database
+$sql = "INSERT INTO mechanics (mechanic_name, appointments_monthly_limit, appointments_booked)
+VALUES ('$name', $dailyLimit, 0)";
+
+if (mysqli_query($conn, $sql)) {
+$showAlert = true;
+header('Location: /mechanicshop/admin_dashboard.php?msg=updated');
+} else {
+echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+}
+} else {
+
+}
+
 ?>
 
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>Appointment Form</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="style.css" class="style">
+    <title>Add Mechanic</title>
 </head>
 <body>
-	<form action="submit.php" method="post">
-		<h2>Add Mechanic</h2>
-		<input type="text" id="name" name="name" placeholder="Name"  rrequired>
-		<input type="text" id="color" name="color"  placeholder="Color" required>
-		<input type="text" id="license" name="license" placeholder="License Number" required>
-		<input type="text" id="engine" name="engine"  placeholder="Engine Number" required>
-		<input type="date" id="date" name="date"  placeholder="Appointment Date" requied>
-		<select id="mechanic" name="mechanic">
-		</select>
-		<input type="submit" value="Submit" id="submit">
-	</form>
+    <div class="form-container">
+			<form action="/mechanicshop/add_mechanic.php" method="post">
+				<h2>Add Mechanic</h2>
+				<input type="text" id="name" name="name" placeholder="Name" required>
+                <input type="number" id="dailyLimit" name="dailyLimit" placeholder="Daily Limit" required>
+				<input type="submit" value="Submit" id="submit">
+				<?php
+				if ($showAlert){
+					echo 'Added uccessfully!';
+				}
+				?>
+			</form>
+    
 </body>
 </html>

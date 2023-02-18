@@ -1,7 +1,7 @@
 <div class="navbar">
   <div class="left-nav">
-    <a href="#mechanics" class="active">Mechanics</a>
-    <a href="#car-parts">Car Parts</a>
+    <a href="#" class="active">Mechanics</a>
+    <a href="#" >Car Parts</a>
   </div>
 
   <div class="right-nav">
