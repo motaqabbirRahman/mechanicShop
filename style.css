@@ -296,3 +296,13 @@ td button {
     a:hover{
       color: #003049;
     }
+
+    .delete-btn{
+      background-color: var(--darkcolor);
+      color: #ddd;
+      font-weight: 670;
+      
+    }
+    .delete-btn:hover{
+      color: var(--background);
+    }

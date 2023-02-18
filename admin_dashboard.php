@@ -5,6 +5,20 @@ if(!isset($_SESSION['adminLoggedin']) || $_SESSION['adminLoggedin']!=true){
 	header("location: admin_login.php");
 	exit;
 }
+require('connection.inc.php');
+
+if (isset($_POST['mechanicId'])) {
+  $mechanicId = mysqli_real_escape_string($conn, $_POST['mechanicId']);
+
+  // Delete the mechanic record from the database
+  $sql = "DELETE FROM mechanics WHERE mechanic_name = '$mechanicId'";
+  mysqli_query($conn, $sql);
+  // Redirect to the current page with a success message
+  header('Location: ' . $_SERVER['PHP_SELF'] . '?msg=deleted');
+exit();
+
+  }
+
 
 
 ?>
@@ -14,6 +28,8 @@ if(!isset($_SESSION['adminLoggedin']) || $_SESSION['adminLoggedin']!=true){
   <meta charset="utf-8">
   <title>Admin Dashboard</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <style>
     /* Navigation bar styles */
     nav {
@@ -44,6 +60,29 @@ if(!isset($_SESSION['adminLoggedin']) || $_SESSION['adminLoggedin']!=true){
     }
     
   </style>
+  <script>
+function deleteMechanic(mechanicId) {
+        if (confirm('Are you sure you want to delete this mechanic?')) {
+          fetch('admin_dashboard.php', {
+            method: 'POST',
+            body: new URLSearchParams({
+              mechanicId: mechanicId
+            })
+          })
+          .then(function(response) {
+            if (response.ok) {
+              location.reload();
+            } else {
+              console.log('Error deleting mechanic');
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+        }
+      }
+
+  </script>
 </head>
 <body>
   <!-- Navigation bar -->
@@ -142,8 +181,10 @@ if(!isset($_SESSION['adminLoggedin']) || $_SESSION['adminLoggedin']!=true){
 							echo '<td>' . $row['appointments_monthly_limit'] . '</td>';
 							echo '<td>' . $row['appointments_booked'] . '</td>';
 							echo '<td><a href="edit_mechanic.php?id=' . $row['mechanic_name'] . '">Update</a>
-                        <a href="update_mechanic_status.php?id=' . $row['mechanic_name'] . '">Delete</a>
+                  <button class="delete-btn" onclick="deleteMechanic(\'' . $row['mechanic_name'] . '\')">Delete</button>
                    </td>';
+                
+                 
 						 echo '</tr>';
 						}
 					} else {
