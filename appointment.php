@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				echo "Error: " . $sql . "<br>" . mysqli_error($conn);
 			}
 } else {
-  echo "No data submitted";
+
 }
 ?>
 
@@ -62,6 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	</style>
 </head>
 <body>
+	  <header>
+     <?php include 'navbar.php'; ?>
+    </header>
 	<div class="container">
     <div class="form-container">
 			<form action="/mechanicshop/appointment.php" method="post">
