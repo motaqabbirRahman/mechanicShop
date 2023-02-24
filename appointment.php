@@ -74,9 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 						<input type="text" id="color" name="color"  placeholder="Color" required>
 						<input type="text" id="license" name="license" placeholder="License Number" required>
 						<input type="text" id="engine" name="engine"  placeholder="Engine Number" required>
-						<input type="date" id="date" name="date"  placeholder="Appointment Date" requied>
+						<input type="date" id="date" name="date" placeholder="Appointment Date" required min="<?php echo date('Y-m-d'); ?>">
+
 						<select id="mechanic" name="mechanic">	
 						<?php
+						    echo"<option disabled selected>mechanic</option>";
 							$query = "SELECT mechanic_name FROM mechanics WHERE appointments_booked < appointments_monthly_limit";
 							$result = mysqli_query($conn, $query);
 							// Generate the options for the dropdown menu

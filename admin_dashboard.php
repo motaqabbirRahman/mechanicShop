@@ -72,6 +72,8 @@ function deleteMechanic(mechanicId) {
           .then(function(response) {
             if (response.ok) {
               location.reload();
+               header('Location: /mechanicshop/admin_dashboard.php?msg=deleted');
+               exit();
             } else {
               console.log('Error deleting mechanic');
             }
@@ -155,6 +157,9 @@ function deleteMechanic(mechanicId) {
               if (isset($_GET['msg']) && $_GET['msg'] === 'updated') {
           echo '<p class="success">Successfully updated!</p>';
                 }
+            elseif(isset($_GET['msg']) && $_GET['msg'] === 'deleted'){
+              echo '<p class="deleted">Successfully Deleted!</p>';
+            }
       ?>
       <div>
            

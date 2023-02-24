@@ -16,13 +16,17 @@ $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
 $dailyLimit = filter_input(INPUT_POST, 'dailyLimit', FILTER_SANITIZE_NUMBER_INT);
 
 // Insert data into the database
+
 $sql = "UPDATE mechanics
-SET appointments_monthly_limit = $dailyLimit,
-    appointments_booked = 0
+SET appointments_monthly_limit = $dailyLimit
 WHERE mechanic_name = '$name'";
+
 
 if (mysqli_query($conn, $sql)) {
 $showAlert = true;
+header('Location: /mechanicshop/admin_dashboard.php?msg=updated');
+
+exit();
 } else {
 echo "Error: " . $sql . "<br>" . mysqli_error($conn);
 }

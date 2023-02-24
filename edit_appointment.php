@@ -1,25 +1,10 @@
 <?php
 session_start();
 
-// if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true){
-// 	header("location: login.php");
-// 	exit;
-// }
-
-// else if(!isset($_SESSION['adminLoggedin']) || $_SESSION['adminLoggedin']!=true){
-// 	header("location: admin_login.php");
-// 	exit;
-// }
-
-if (!isset($_SESSION['loggedin'])) {
-    header('Location: login.php');
-    exit();
+if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true){
+	header("location: login.php");
+	exit;
 }
-
-else if (!isset($_SESSION['adminLoggedin'])) {
-        header('Location: admin_login.php');
-        exit();
-  }
 
 require('connection.inc.php');
 
@@ -32,27 +17,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $engine = mysqli_real_escape_string($conn, $_POST['engine']);
   $date = mysqli_real_escape_string($conn, $_POST['date']);
   $mechanic = mysqli_real_escape_string($conn, $_POST['mechanic']);
+  $oldMechanicName = mysqli_real_escape_string($conn, $_POST['oldMechanicName']);
 
   $sql = "UPDATE appointments SET name='$name', phone='$phone', color='$color', license_number='$license', engine_number='$engine', appointment_date='$date', mechanic_name='$mechanic' WHERE id='$id'";
   if (mysqli_query($conn, $sql)) {
-    // header('Location: /mechanicshop/appointment.php?msg=success');
+    
+    $query = "UPDATE mechanics SET appointments_booked = appointments_booked - 1 WHERE mechanic_name = '$oldMechanicName'";
+    mysqli_query($conn, $query);
 
-    /*new line*/
-
-    if ($_SESSION['user_type'] == "admin") {
-      // redirect to admin dashboard if user is an admin
-      header('Location: /mechanicshop/admin_dashboard.php?msg=success');
-      exit();
-      } else {
-          // redirect to user dashboard if user is a regular user
-          header('Location: /mechanicshop/appointment.php?msg=success');
-          exit();
-      }
-
-    /*new line */
+    // Update the appointments_booked field of the new mechanic
     $query = "UPDATE mechanics SET appointments_booked = appointments_booked + 1 WHERE mechanic_name = '$mechanic'";
-				mysqli_query($conn, $query);
-    exit();
+    mysqli_query($conn, $query);
+
+    if ($_SESSION['user_type'] == "user") {
+      // redirect to admin dashboard if user is an admin
+      header('Location: /mechanicshop/appointment.php?msg=success');
+     
+      exit();
+    } else {
+      // redirect to user dashboard if user is a regular useri
+       header('Location: /mechanicshop/admin_dashboard.php?msg=success');
+      
+      exit();
+    }
   } else {
     echo "Error updating record: " . mysqli_error($conn);
   }
@@ -88,16 +75,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <input type="text" id="license" name="license" placeholder="License Number" value="<?php echo $row['license_number'] ?>" required>
     <input type="text" id="engine" name="engine" placeholder="Engine Number" value="<?php echo $row['engine_number'] ?>" required>
     <input type="date" id="date" name="date" placeholder="Appointment Date" value="<?php echo $row['appointment_date'] ?>" required>
+     <br>
+    <label  for="oldMechanicName">Current Mehcanic</label>
+    <input type="text"  name="oldMechanicName" value="<?php echo $row['mechanic_name'] ?>">
+    <br>
+    <label for="mechanic">Chose new Mechanic</label>
     <select id="mechanic" name="mechanic">
       <?php
-       $query = "SELECT mechanic_name FROM mechanics WHERE appointments_booked < appointments_monthly_limit";
-					$result = mysqli_query($conn, $query);
-			
-					// Generate the options for the dropdown menu
-					while ($row = mysqli_fetch_assoc($result)) {
-					echo "<option value='{$row['mechanic_name']}'>{$row['mechanic_name']}</option>";
+     $query = "SELECT mechanic_name FROM mechanics WHERE appointments_booked < appointments_monthly_limit";
+      $result = mysqli_query($conn, $query);
+  
+      // Generate the options for the dropdown menu
+      while ($row = mysqli_fetch_assoc($result)) {
+      echo "<option value='{$row['mechanic_name']}'>{$row['mechanic_name']}</option>";
 
-					}
+      } 
 	 ?>     
         </select>
         <input type="submit" value="Update" id="updateButton">

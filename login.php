@@ -6,6 +6,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     require('connection.inc.php');
     $username = $_POST["username"];
     $password = $_POST["password"];
+
     
       $sql = "SELECT * from users where username='$username' AND password='$password'";
       $result = mysqli_query($conn, $sql);
@@ -15,6 +16,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         session_start();
         $_SESSION['loggedin'] = true;
         $_SESSION['username'] = $username;
+        $_SESSION['user_type']  =  'user';
         header("location: appointment.php");
       }
      else{
